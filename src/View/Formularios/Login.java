@@ -153,9 +153,9 @@ public class Login extends javax.swing.JFrame {
         boolean credencialesValidas = validateUser(user, password);
 
         if (credencialesValidas) {
-            /*Home si = new Home();
-            si.setVisible(true);
-            dispose();*/
+            Home home = new Home();
+            home.setVisible(true);
+            dispose();
         } else {
             JOptionPane.showMessageDialog(this, "Usuario/Contraseña incorrecta");
         }
