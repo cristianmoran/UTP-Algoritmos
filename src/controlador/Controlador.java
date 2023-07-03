@@ -12,7 +12,7 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import modelo.Empleado;
 import modelo.EmpleadoDAO;
-import vista.Vista;
+import View.Formularios.Vista;
 
 /**
  *
