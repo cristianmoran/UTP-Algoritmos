@@ -5,17 +5,82 @@
 package View.Formularios;
 
 import Controller.Controller;
+import Model.DBConnection;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
+import javax.swing.table.TableRowSorter;
 
 public class Employee extends javax.swing.JPanel {
-    private Controller controller;
+    
+    private TableRowSorter trsfiltro;
+    String filtro;
+    Connection connection;
+    
+    void Limpiar() {
+        txtCodigo.setEditable(true);
+        txtCedula.setEditable(true);
+        txtApellido.setEditable(true);
+        txtNombre.setEditable(true);
+        txtCodigo.setText("");
+        txtCedula.setText("");
+        txtApellido.setText("");
+        txtNombre.setText("");
+    }
 
+    private void cargarDatosEmpleados() {
+    // Crear una instancia de DBConnection
+    DBConnection dbConnection = new DBConnection();
+    
+    try {
+        // Abrir la conexión a la base de datos
+        dbConnection.openConnection();
+
+        // Consulta SQL para obtener los datos de asistencia
+        String query = "SELECT codigo, documento, nombre, apellido, estado, rol FROM employee";
+
+        // Preparar la declaración SQL
+        PreparedStatement statement = dbConnection.prepareStatement(query);
+
+        // Ejecutar la consulta y obtener los resultados
+        ResultSet resultSet = statement.executeQuery();
+
+        // Limpiar los datos existentes en la tabla
+        DefaultTableModel model = (DefaultTableModel) tabla.getModel();
+        model.setRowCount(0);
+
+        // Recorrer los resultados y agregarlos a la tabla
+        while (resultSet.next()) {
+            String codigo = resultSet.getString("codigo");
+            String documento = resultSet.getString("documento");
+            String nombre = resultSet.getString("nombre");
+            String apellido = resultSet.getString("apellido");
+            String estado = resultSet.getString("estado");
+            String rol = resultSet.getString("rol");
+
+            // Agregar una nueva fila a la tabla con los datos
+            model.addRow(new Object[]{codigo, documento, nombre, apellido, estado, rol});
+        }
+
+        // Cerrar el ResultSet, el PreparedStatement y la conexión a la base de datos
+        resultSet.close();
+        statement.close();
+        dbConnection.closeConnection();
+    } catch (SQLException e) {
+        System.out.println("Error al cargar los datos de asistencia: " + e.getMessage());
+    }
+  
+   
+   }
     public Employee() {
         initComponents();
-        initController();
+        cargarDatosEmpleados();
     }
 
     @SuppressWarnings("unchecked")
@@ -24,17 +89,22 @@ public class Employee extends javax.swing.JPanel {
 
         Contenedor = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        txtCodigo = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
+        txtApellido = new javax.swing.JTextField();
+        txtNombre = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tabla = new javax.swing.JTable();
         jLabel6 = new javax.swing.JLabel();
-        jTextField4 = new javax.swing.JTextField();
+        txtCedula = new javax.swing.JTextField();
+        btnGuardar = new javax.swing.JButton();
+        btnModificar = new javax.swing.JButton();
+        btnEliminar = new javax.swing.JButton();
+        btnBuscar = new javax.swing.JButton();
+        btnLimpiar = new javax.swing.JButton();
 
         Contenedor.setBackground(new java.awt.Color(246, 247, 245));
 
@@ -43,7 +113,7 @@ public class Employee extends javax.swing.JPanel {
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabel1.setText("Busqueda");
 
-        jTextField1.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtCodigo.setHorizontalAlignment(javax.swing.JTextField.CENTER);
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -53,7 +123,7 @@ public class Employee extends javax.swing.JPanel {
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabel3.setText("Apellido");
 
-        jTextField2.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtApellido.setHorizontalAlignment(javax.swing.JTextField.CENTER);
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -64,7 +134,7 @@ public class Employee extends javax.swing.JPanel {
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabel5.setText("Lista de empleados registrados");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tabla.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -72,11 +142,51 @@ public class Employee extends javax.swing.JPanel {
                 "Código", "Cédula", "Apellido", "Nombre", "Estado", "Cargo"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        tabla.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tablaMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tabla);
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabel6.setText("Cédula");
+
+        btnGuardar.setText("Guardar");
+        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardarActionPerformed(evt);
+            }
+        });
+
+        btnModificar.setText("Actualizar");
+        btnModificar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnModificarActionPerformed(evt);
+            }
+        });
+
+        btnEliminar.setText("Eliminar");
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarActionPerformed(evt);
+            }
+        });
+
+        btnBuscar.setText("Buscar");
+        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarActionPerformed(evt);
+            }
+        });
+
+        btnLimpiar.setText("Limpiar");
+        btnLimpiar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLimpiarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout ContenedorLayout = new javax.swing.GroupLayout(Contenedor);
         Contenedor.setLayout(ContenedorLayout);
@@ -85,29 +195,43 @@ public class Employee extends javax.swing.JPanel {
             .addGroup(ContenedorLayout.createSequentialGroup()
                 .addGap(27, 27, 27)
                 .addGroup(ContenedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(ContenedorLayout.createSequentialGroup()
-                        .addGroup(ContenedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addGroup(ContenedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jTextField1)))
-                        .addGap(31, 31, 31)
-                        .addGroup(ContenedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(ContenedorLayout.createSequentialGroup()
-                                .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(29, 29, 29)
-                                .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(ContenedorLayout.createSequentialGroup()
-                                .addComponent(jLabel6)
-                                .addGap(169, 169, 169)
-                                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(37, 37, 37)
-                        .addGroup(ContenedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(jLabel5)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 873, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(ContenedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(ContenedorLayout.createSequentialGroup()
+                            .addGroup(ContenedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel2)
+                                .addGroup(ContenedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(txtCodigo)))
+                            .addGap(31, 31, 31)
+                            .addGroup(ContenedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(ContenedorLayout.createSequentialGroup()
+                                    .addComponent(jLabel6)
+                                    .addGap(169, 169, 169)
+                                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(ContenedorLayout.createSequentialGroup()
+                                    .addComponent(txtCedula, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(29, 29, 29)
+                                    .addGroup(ContenedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(btnLimpiar)
+                                        .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addGap(37, 37, 37)
+                            .addGroup(ContenedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(ContenedorLayout.createSequentialGroup()
+                                    .addComponent(txtApellido, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(btnBuscar))))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 873, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(24, Short.MAX_VALUE))
+            .addGroup(ContenedorLayout.createSequentialGroup()
+                .addGap(116, 116, 116)
+                .addComponent(btnGuardar)
+                .addGap(175, 175, 175)
+                .addComponent(btnModificar)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnEliminar)
+                .addGap(160, 160, 160))
         );
         ContenedorLayout.setVerticalGroup(
             ContenedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -126,15 +250,23 @@ public class Employee extends javax.swing.JPanel {
                         .addComponent(jLabel3)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(ContenedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtCedula, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtApellido, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnBuscar))
                 .addGap(43, 43, 43)
-                .addComponent(jLabel5)
+                .addGroup(ContenedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(btnLimpiar))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(125, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 49, Short.MAX_VALUE)
+                .addGroup(ContenedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnGuardar)
+                    .addComponent(btnModificar)
+                    .addComponent(btnEliminar))
+                .addGap(50, 50, 50))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -155,36 +287,152 @@ public class Employee extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    public Boolean validateEmployee(String code, String name, String document, String lastName) {
-        controller.startConnection();
+    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
 
-        ResultSet resultSet = controller.searchEmployee(code, name, document,lastName);
-        
-        System.out.println("");
+        String codigo = txtCodigo.getText();
+        String documento = txtCedula.getText();
+        String apellido = txtApellido.getText();
+        String nombre = txtNombre.getText();
+        String consulta = "INSERT INTO employee (codigo, documento, apellido, nombre, estado, rol) VALUES ('" + codigo + "','" + documento + "','" + apellido + "','" + nombre + "', 1, '1')";
         try {
-            Boolean existUser = false;
-            while (resultSet.next()) {
-                existUser = true;
-                String code2 = resultSet.getString("code");
-                String name2 = resultSet.getString("name");
-                String document2 = resultSet.getString("document");
-                System.out.println("ID: " + code2 + ", Name: " + name2 + ", Document: "+document2);
+            DBConnection valor = new DBConnection();
+            Connection connection = valor.openConnection();
+            PreparedStatement statement = connection.prepareStatement(consulta);
+            statement.executeUpdate();
+            JOptionPane.showMessageDialog(null, "datos guardados");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "error" + e.getMessage());
+            System.out.println(e.getMessage());
+        }
+        Limpiar();
+        cargarDatosEmpleados();
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnGuardarActionPerformed
+
+    private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
+
+        Limpiar();
+        
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnLimpiarActionPerformed
+
+    private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
+
+        try {
+            DBConnection valor = new DBConnection();
+            Connection connection = valor.openConnection();
+            String query = "update employee set documento=?, apellido=?, nombre=? where codigo=?";
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setString(1, txtCedula.getText());
+            statement.setString(2, txtApellido.getText());
+            statement.setString(3, txtNombre.getText());
+            statement.setString(4, txtCodigo.getText());
+            int rowsAffected = statement.executeUpdate();
+            if (rowsAffected > 0) {
+                JOptionPane.showMessageDialog(null, "Datos actualizados");
+            } else {
+                JOptionPane.showMessageDialog(null, "No se pudo actualizar los datos");
             }
-            return existUser;
-        } catch (SQLException e) {
-            e.printStackTrace();
+            statement.close();
+            connection.close();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error: " + e.getMessage());
+        }
+        Limpiar();
+        cargarDatosEmpleados();
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnModificarActionPerformed
+
+    private void tablaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaMouseClicked
+
+        if (evt.getButton() == 1) {
+            try {
+                int fila = tabla.getSelectedRow();
+                if (fila >= 0) {
+                    String code = tabla.getValueAt(fila, 0).toString();
+                    ResultSet rs = null;
+                    DBConnection valor = new DBConnection();
+                    Connection connection = valor.openConnection();
+                    String query = "SELECT * FROM employee WHERE codigo=?";
+                    PreparedStatement statement = connection.prepareStatement(query);
+                    statement.setString(1, code);
+                    rs = statement.executeQuery();
+                    if (rs.next()) {
+                        txtCodigo.setText(rs.getString("codigo"));
+                        txtCedula.setText(rs.getString("documento"));
+                        txtApellido.setText(rs.getString("apellido"));
+                        txtNombre.setText(rs.getString("nombre"));
+                    }
+                    rs.close();
+                    statement.close();
+                    connection.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
-        controller.closeConnection();
-        return false;
-    }
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tablaMouseClicked
 
-        public void initController() {
-        controller = new Controller();
-    }
-        
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+        try {
+            int fila = tabla.getSelectedRow();
+            if (fila >= 0) {
+                String codigo = tabla.getValueAt(fila, 0).toString();
+                DBConnection valor = new DBConnection();
+                Connection connection = valor.openConnection();
+                String query = "DELETE FROM employee WHERE codigo=?";
+                PreparedStatement statement = connection.prepareStatement(query);
+                statement.setString(1, codigo);
+                int rowCount = statement.executeUpdate();
+                if (rowCount > 0) {
+                    JOptionPane.showMessageDialog(null, "Datos eliminados");
+                }
+                statement.close();
+                connection.close();
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error: " + e.getMessage());
+        }
+
+        Limpiar();
+        cargarDatosEmpleados();
+
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnEliminarActionPerformed
+
+    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+        String codigo = txtCodigo.getText();
+        String sql = "SELECT * FROM employee WHERE codigo = ?";
+        try {
+            DBConnection valor = new DBConnection();
+            Connection connection = valor.openConnection();
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, codigo);
+            ResultSet rs = statement.executeQuery();
+            if (rs.next()) {
+                txtCedula.setText(rs.getString("documento"));
+                txtApellido.setText(rs.getString("apellido"));
+                txtNombre.setText(rs.getString("nombre"));
+            } else {
+                JOptionPane.showMessageDialog(null, "No se encontraron registros con el código proporcionado.");
+            }
+            rs.close();
+            statement.close();
+            connection.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_btnBuscarActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel Contenedor;
+    private javax.swing.JButton btnBuscar;
+    private javax.swing.JButton btnEliminar;
+    private javax.swing.JButton btnGuardar;
+    private javax.swing.JButton btnLimpiar;
+    private javax.swing.JButton btnModificar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -192,10 +440,10 @@ public class Employee extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
+    private javax.swing.JTable tabla;
+    private javax.swing.JTextField txtApellido;
+    private javax.swing.JTextField txtCedula;
+    private javax.swing.JTextField txtCodigo;
+    private javax.swing.JTextField txtNombre;
     // End of variables declaration//GEN-END:variables
 }
