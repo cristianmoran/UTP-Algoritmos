@@ -10,7 +10,7 @@ public class DBConnection {
     private Connection connection;
     private final String url = "jdbc:mysql://localhost:3306/marcacion_asistencia";
     private final String username = "root";
-    private final String password = "root";
+    private final String password = "";
 
     public void openConnection() {
         try {
@@ -30,8 +30,9 @@ public class DBConnection {
             connection.close();
         }
     }
-
-    public PreparedStatement prepareStatement(String query) throws SQLException {
+ public PreparedStatement prepareStatement(String query) throws SQLException {
         return connection.prepareStatement(query);
-    }
+    
+    
+}
 }
