@@ -16,31 +16,30 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `users`
+-- Table structure for table `vacacion`
 --
 
-DROP TABLE IF EXISTS `users`;
+DROP TABLE IF EXISTS `vacacion`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `users` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `user` varchar(45) NOT NULL,
-  `password` varchar(45) NOT NULL,
-  `name` varchar(45) DEFAULT NULL,
-  `lastname` varchar(45) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `id_UNIQUE` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE `vacacion` (
+  `Código` int NOT NULL,
+  `Nombre` varchar(20) DEFAULT NULL,
+  `Autoriza` varchar(20) DEFAULT NULL,
+  `Fecha_inicio` varchar(20) DEFAULT NULL,
+  `Fecha_salida` varchar(20) DEFAULT NULL,
+  PRIMARY KEY (`Código`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `users`
+-- Dumping data for table `vacacion`
 --
 
-LOCK TABLES `users` WRITE;
-/*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'admin','1234567','cristian','moran');
-/*!40000 ALTER TABLE `users` ENABLE KEYS */;
+LOCK TABLES `vacacion` WRITE;
+/*!40000 ALTER TABLE `vacacion` DISABLE KEYS */;
+INSERT INTO `vacacion` VALUES (1,'Pedro','Jefe','05/05/23','10/05/23'),(2,'Pablo','Jefe','06/05/23','18/05/23'),(3,'Miguel','Jefe','10/05/23','18/05/23'),(4,'Lucas','Jefe','01/05/23','20/05/23'),(5,'Santiago','Jefe','04/05/23','25/05/23');
+/*!40000 ALTER TABLE `vacacion` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 

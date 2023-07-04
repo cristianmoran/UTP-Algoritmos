@@ -23,13 +23,13 @@ DROP TABLE IF EXISTS `employee`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `employee` (
-  `code` varchar(20) NOT NULL,
-  `document` varchar(20) DEFAULT NULL,
-  `lastname` varchar(45) DEFAULT NULL,
-  `name` varchar(45) DEFAULT NULL,
-  `status` int DEFAULT NULL,
+  `codigo` varchar(20) NOT NULL,
+  `documento` varchar(20) DEFAULT NULL,
+  `apellido` varchar(45) DEFAULT NULL,
+  `nombre` varchar(45) DEFAULT NULL,
+  `estado` int DEFAULT NULL,
   `rol` varchar(45) DEFAULT NULL,
-  PRIMARY KEY (`code`)
+  PRIMARY KEY (`codigo`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -39,7 +39,7 @@ CREATE TABLE `employee` (
 
 LOCK TABLES `employee` WRITE;
 /*!40000 ALTER TABLE `employee` DISABLE KEYS */;
-INSERT INTO `employee` VALUES ('E000001','46541739','moran','cristian',0,'1');
+INSERT INTO `employee` VALUES ('E00001','46541739','mor','cristian',1,'1');
 /*!40000 ALTER TABLE `employee` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -52,4 +52,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-06-27 17:18:16
+-- Dump completed on 2023-07-04 14:17:21
