@@ -11,6 +11,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -54,6 +55,7 @@ public class Employee extends javax.swing.JPanel {
             // Limpiar los datos existentes en la tabla
             DefaultTableModel model = (DefaultTableModel) tabla.getModel();
             model.setRowCount(0);
+            List<Object[]> list = new ArrayList<>();
 
             // Recorrer los resultados y agregarlos a la tabla
             while (resultSet.next()) {
@@ -64,8 +66,12 @@ public class Employee extends javax.swing.JPanel {
                 String estado = resultSet.getString("estado");
                 String rol = resultSet.getString("rol");
 
-                // Agregar una nueva fila a la tabla con los datos
-                model.addRow(new Object[]{codigo, documento, nombre, apellido, estado, rol});
+                list.add(new Object[]{codigo, documento, nombre, apellido, estado, rol});
+            }
+             list.sort(Comparator.comparing(arr -> (String) arr[2]));
+
+            for (Object[] data : list) {
+                model.addRow(data);
             }
 
             // Cerrar el ResultSet, el PreparedStatement y la conexión a la base de datos
@@ -139,7 +145,7 @@ public class Employee extends javax.swing.JPanel {
 
             },
             new String [] {
-                "Código", "Cédula", "Apellido", "Nombre", "Estado", "Cargo"
+                "Código", "Cédula", "Nombre", "Apellidos", "Estado", "Cargo"
             }
         ));
         tabla.addMouseListener(new java.awt.event.MouseAdapter() {
