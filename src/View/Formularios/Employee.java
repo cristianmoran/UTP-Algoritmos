@@ -43,7 +43,7 @@ public class Employee extends javax.swing.JPanel {
         dbConnection.openConnection();
 
         // Consulta SQL para obtener los datos de asistencia
-        String query = "SELECT code, document, lastname, name, status, rol FROM employee";
+        String query = "SELECT codigo, documento, nombre, apellido, estado, rol FROM employee";
 
         // Preparar la declaración SQL
         PreparedStatement statement = dbConnection.prepareStatement(query);
@@ -57,11 +57,11 @@ public class Employee extends javax.swing.JPanel {
 
         // Recorrer los resultados y agregarlos a la tabla
         while (resultSet.next()) {
-            String codigo = resultSet.getString("code");
-            String documento = resultSet.getString("document");
-            String nombre = resultSet.getString("name");
-            String apellido = resultSet.getString("lastname");
-            String estado = resultSet.getString("status");
+            String codigo = resultSet.getString("codigo");
+            String documento = resultSet.getString("documento");
+            String nombre = resultSet.getString("nombre");
+            String apellido = resultSet.getString("apellido");
+            String estado = resultSet.getString("estado");
             String rol = resultSet.getString("rol");
 
             // Agregar una nueva fila a la tabla con los datos
@@ -293,7 +293,7 @@ public class Employee extends javax.swing.JPanel {
         String documento = txtCedula.getText();
         String apellido = txtApellido.getText();
         String nombre = txtNombre.getText();
-        String consulta = "INSERT INTO employee (code, document, lastname, name, status, rol) VALUES ('" + codigo + "','" + documento + "','" + apellido + "','" + nombre + "', 1, '1')";
+        String consulta = "INSERT INTO employee (codigo, documento, apellido, nombre, estado, rol) VALUES ('" + codigo + "','" + documento + "','" + apellido + "','" + nombre + "', 1, '1')";
         try {
             DBConnection valor = new DBConnection();
             Connection connection = valor.openConnection();
@@ -321,7 +321,7 @@ public class Employee extends javax.swing.JPanel {
         try {
             DBConnection valor = new DBConnection();
             Connection connection = valor.openConnection();
-            String query = "update employee set document=?, lastname=?, name=? where code=?";
+            String query = "update employee set documento=?, apellido=?, nombre=? where codigo=?";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, txtCedula.getText());
             statement.setString(2, txtApellido.getText());
@@ -353,15 +353,15 @@ public class Employee extends javax.swing.JPanel {
                     ResultSet rs = null;
                     DBConnection valor = new DBConnection();
                     Connection connection = valor.openConnection();
-                    String query = "SELECT * FROM employee WHERE code=?";
+                    String query = "SELECT * FROM employee WHERE codigo=?";
                     PreparedStatement statement = connection.prepareStatement(query);
                     statement.setString(1, code);
                     rs = statement.executeQuery();
                     if (rs.next()) {
-                        txtCodigo.setText(rs.getString("code"));
-                        txtCedula.setText(rs.getString("document"));
-                        txtApellido.setText(rs.getString("lastname"));
-                        txtNombre.setText(rs.getString("name"));
+                        txtCodigo.setText(rs.getString("codigo"));
+                        txtCedula.setText(rs.getString("documento"));
+                        txtApellido.setText(rs.getString("apellido"));
+                        txtNombre.setText(rs.getString("nombre"));
                     }
                     rs.close();
                     statement.close();
@@ -382,7 +382,7 @@ public class Employee extends javax.swing.JPanel {
                 String codigo = tabla.getValueAt(fila, 0).toString();
                 DBConnection valor = new DBConnection();
                 Connection connection = valor.openConnection();
-                String query = "DELETE FROM employee WHERE code=?";
+                String query = "DELETE FROM employee WHERE codigo=?";
                 PreparedStatement statement = connection.prepareStatement(query);
                 statement.setString(1, codigo);
                 int rowCount = statement.executeUpdate();
@@ -404,7 +404,7 @@ public class Employee extends javax.swing.JPanel {
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
         String codigo = txtCodigo.getText();
-        String sql = "SELECT * FROM employee WHERE code = ?";
+        String sql = "SELECT * FROM employee WHERE codigo = ?";
         try {
             DBConnection valor = new DBConnection();
             Connection connection = valor.openConnection();
@@ -412,9 +412,9 @@ public class Employee extends javax.swing.JPanel {
             statement.setString(1, codigo);
             ResultSet rs = statement.executeQuery();
             if (rs.next()) {
-                txtCedula.setText(rs.getString("document"));
-                txtApellido.setText(rs.getString("lastname"));
-                txtNombre.setText(rs.getString("name"));
+                txtCedula.setText(rs.getString("documento"));
+                txtApellido.setText(rs.getString("apellido"));
+                txtNombre.setText(rs.getString("nombre"));
             } else {
                 JOptionPane.showMessageDialog(null, "No se encontraron registros con el código proporcionado.");
             }
