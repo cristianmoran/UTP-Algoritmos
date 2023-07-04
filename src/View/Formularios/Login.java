@@ -220,7 +220,6 @@ public class Login extends javax.swing.JFrame {
         return false;
     }
 
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPasswordField Password;
     private javax.swing.JButton jButton1;

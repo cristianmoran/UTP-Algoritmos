@@ -3,11 +3,12 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package View.Clases;
+
 import java.util.ArrayList;
 import java.util.List;
 
 class RegistroAsistencia {
-   
+
     private String nombre;
     private String fecha;
 
@@ -26,6 +27,7 @@ class RegistroAsistencia {
 }
 
 public class TemaSemana {
+
     public static void bubbleSort(List<RegistroAsistencia> registros) {
         int n = registros.size();
         for (int i = 0; i < n - 1; i++) {
@@ -39,7 +41,7 @@ public class TemaSemana {
             }
         }
     }
-    
+
     public static RegistroAsistencia buscarRegistroPorNombre(List<RegistroAsistencia> registros, String nombreBuscado) {
         for (RegistroAsistencia registro : registros) {
             if (registro.getNombre().equalsIgnoreCase(nombreBuscado)) {
@@ -60,20 +62,19 @@ public class TemaSemana {
 
         // Llamar al método bubbleSort para ordenar los registros por fecha
         bubbleSort(registros);
-        
+
         //nombre a buscar
         String nombreBuscado = "Jerry";
-        
+
         // Llamar al método buscarRegistroPorNombre para encontrar el registro de asistencia por nombre
         RegistroAsistencia registroEncontrado = buscarRegistroPorNombre(registros, nombreBuscado);
-
 
         // Imprimir los registros ordenados
         System.out.println("Registros de asistencia ordenados por fecha de ingreso:");
         for (RegistroAsistencia registro : registros) {
             System.out.println(registro.getNombre() + " - " + registro.getFecha());
         }
-        
+
         System.out.println("");
         // Imprimir el registro encontrado
         if (registroEncontrado != null) {
@@ -85,5 +86,3 @@ public class TemaSemana {
         }
     }
 }
-    
-

@@ -76,7 +76,8 @@ public class Controller {
         }
         return resultSet;
     }
-  public ResultSet executeQuery(String query) throws SQLException {
+
+    public ResultSet executeQuery(String query) throws SQLException {
         PreparedStatement statement = connection.prepareStatement(query);
         return statement.executeQuery();
     }

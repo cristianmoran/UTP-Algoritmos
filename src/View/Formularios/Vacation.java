@@ -330,7 +330,7 @@ public class Vacation extends javax.swing.JPanel {
             int rowsInserted = statement.executeUpdate();
             if (rowsInserted > 0) {
                 JOptionPane.showMessageDialog(null, "Registro realizado");
-          getDataVacacion();
+                getDataVacacion();
             } else {
                 JOptionPane.showMessageDialog(null, "Error al agregar los datos");
             }
@@ -409,7 +409,7 @@ public class Vacation extends javax.swing.JPanel {
                 int rowsUpdated = statement.executeUpdate();
                 if (rowsUpdated > 0) {
                     JOptionPane.showMessageDialog(null, "Registro Actualizado");
-getDataVacacion();
+                    getDataVacacion();
                     // Limpiar los campos de texto y restablecer el ID de edición
                     limpiarCampos();
                     idEditar = -1;
@@ -457,7 +457,7 @@ getDataVacacion();
                     if (rowsDeleted > 0) {
                         JOptionPane.showMessageDialog(null, "Registro eliminado");
                         // Actualizar la tabla u otros componentes después de la eliminación
-getDataVacacion();
+                        getDataVacacion();
                     } else {
                         JOptionPane.showMessageDialog(null, "Error al eliminar registro");
                     }

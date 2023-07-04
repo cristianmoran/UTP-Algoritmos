@@ -18,11 +18,11 @@ import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableRowSorter;
 
 public class Employee extends javax.swing.JPanel {
-    
+
     private TableRowSorter trsfiltro;
     String filtro;
     Connection connection;
-    
+
     void Limpiar() {
         txtCodigo.setEditable(true);
         txtCedula.setEditable(true);
@@ -35,49 +35,49 @@ public class Employee extends javax.swing.JPanel {
     }
 
     private void cargarDatosEmpleados() {
-    // Crear una instancia de DBConnection
-    DBConnection dbConnection = new DBConnection();
-    
-    try {
-        // Abrir la conexión a la base de datos
-        dbConnection.openConnection();
+        // Crear una instancia de DBConnection
+        DBConnection dbConnection = new DBConnection();
 
-        // Consulta SQL para obtener los datos de asistencia
-        String query = "SELECT codigo, documento, nombre, apellido, estado, rol FROM employee";
+        try {
+            // Abrir la conexión a la base de datos
+            dbConnection.openConnection();
 
-        // Preparar la declaración SQL
-        PreparedStatement statement = dbConnection.prepareStatement(query);
+            // Consulta SQL para obtener los datos de asistencia
+            String query = "SELECT codigo, documento, nombre, apellido, estado, rol FROM employee";
 
-        // Ejecutar la consulta y obtener los resultados
-        ResultSet resultSet = statement.executeQuery();
+            // Preparar la declaración SQL
+            PreparedStatement statement = dbConnection.prepareStatement(query);
 
-        // Limpiar los datos existentes en la tabla
-        DefaultTableModel model = (DefaultTableModel) tabla.getModel();
-        model.setRowCount(0);
+            // Ejecutar la consulta y obtener los resultados
+            ResultSet resultSet = statement.executeQuery();
 
-        // Recorrer los resultados y agregarlos a la tabla
-        while (resultSet.next()) {
-            String codigo = resultSet.getString("codigo");
-            String documento = resultSet.getString("documento");
-            String nombre = resultSet.getString("nombre");
-            String apellido = resultSet.getString("apellido");
-            String estado = resultSet.getString("estado");
-            String rol = resultSet.getString("rol");
+            // Limpiar los datos existentes en la tabla
+            DefaultTableModel model = (DefaultTableModel) tabla.getModel();
+            model.setRowCount(0);
 
-            // Agregar una nueva fila a la tabla con los datos
-            model.addRow(new Object[]{codigo, documento, nombre, apellido, estado, rol});
+            // Recorrer los resultados y agregarlos a la tabla
+            while (resultSet.next()) {
+                String codigo = resultSet.getString("codigo");
+                String documento = resultSet.getString("documento");
+                String nombre = resultSet.getString("nombre");
+                String apellido = resultSet.getString("apellido");
+                String estado = resultSet.getString("estado");
+                String rol = resultSet.getString("rol");
+
+                // Agregar una nueva fila a la tabla con los datos
+                model.addRow(new Object[]{codigo, documento, nombre, apellido, estado, rol});
+            }
+
+            // Cerrar el ResultSet, el PreparedStatement y la conexión a la base de datos
+            resultSet.close();
+            statement.close();
+            dbConnection.closeConnection();
+        } catch (SQLException e) {
+            System.out.println("Error al cargar los datos de asistencia: " + e.getMessage());
         }
 
-        // Cerrar el ResultSet, el PreparedStatement y la conexión a la base de datos
-        resultSet.close();
-        statement.close();
-        dbConnection.closeConnection();
-    } catch (SQLException e) {
-        System.out.println("Error al cargar los datos de asistencia: " + e.getMessage());
     }
-  
-   
-   }
+
     public Employee() {
         initComponents();
         cargarDatosEmpleados();
@@ -312,7 +312,7 @@ public class Employee extends javax.swing.JPanel {
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
 
         Limpiar();
-        
+
         // TODO add your handling code here:
     }//GEN-LAST:event_btnLimpiarActionPerformed
 

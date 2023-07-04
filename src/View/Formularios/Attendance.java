@@ -3,71 +3,68 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
 package View.Formularios;
+
 import Model.DBConnection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 public class Attendance extends javax.swing.JPanel {
 
-   private void cargarDatosAsistencia() {
-    // Crear una instancia de DBConnection
-    DBConnection dbConnection = new DBConnection();
-    
-    try {
-        // Abrir la conexión a la base de datos
-        dbConnection.openConnection();
+    private void cargarDatosAsistencia() {
+        // Crear una instancia de DBConnection
+        DBConnection dbConnection = new DBConnection();
 
-        // Consulta SQL para obtener los datos de asistencia
-        String query = "SELECT Id, cedula, Nombre, Apellido, Cargo, Hora_entrada, Hora_salida, Turno FROM asistencia";
+        try {
+            // Abrir la conexión a la base de datos
+            dbConnection.openConnection();
 
-        // Preparar la declaración SQL
-        PreparedStatement statement = dbConnection.prepareStatement(query);
+            // Consulta SQL para obtener los datos de asistencia
+            String query = "SELECT Id, cedula, Nombre, Apellido, Cargo, Hora_entrada, Hora_salida, Turno FROM asistencia";
 
-        // Ejecutar la consulta y obtener los resultados
-        ResultSet resultSet = statement.executeQuery();
+            // Preparar la declaración SQL
+            PreparedStatement statement = dbConnection.prepareStatement(query);
 
-        // Limpiar los datos existentes en la tabla
-        DefaultTableModel model = (DefaultTableModel) datos_asis.getModel();
-        model.setRowCount(0);
+            // Ejecutar la consulta y obtener los resultados
+            ResultSet resultSet = statement.executeQuery();
 
-        // Recorrer los resultados y agregarlos a la tabla
-        while (resultSet.next()) {
-            String Id = resultSet.getString("Id");
-            String cedula = resultSet.getString("cedula");
-            String nombre = resultSet.getString("Nombre");
-            String apellido = resultSet.getString("Apellido");
-            String cargo = resultSet.getString("Cargo");
-            String horaEntrada = resultSet.getString("Hora_entrada");
-            String horaSalida = resultSet.getString("Hora_salida");
-            String turno = resultSet.getString("Turno");
+            // Limpiar los datos existentes en la tabla
+            DefaultTableModel model = (DefaultTableModel) datos_asis.getModel();
+            model.setRowCount(0);
 
-            // Agregar una nueva fila a la tabla con los datos
-            model.addRow(new Object[]{Id, cedula, nombre, apellido, cargo, horaEntrada, horaSalida, turno});
+            // Recorrer los resultados y agregarlos a la tabla
+            while (resultSet.next()) {
+                String Id = resultSet.getString("Id");
+                String cedula = resultSet.getString("cedula");
+                String nombre = resultSet.getString("Nombre");
+                String apellido = resultSet.getString("Apellido");
+                String cargo = resultSet.getString("Cargo");
+                String horaEntrada = resultSet.getString("Hora_entrada");
+                String horaSalida = resultSet.getString("Hora_salida");
+                String turno = resultSet.getString("Turno");
+
+                // Agregar una nueva fila a la tabla con los datos
+                model.addRow(new Object[]{Id, cedula, nombre, apellido, cargo, horaEntrada, horaSalida, turno});
+            }
+
+            // Cerrar el ResultSet, el PreparedStatement y la conexión a la base de datos
+            resultSet.close();
+            statement.close();
+            dbConnection.closeConnection();
+        } catch (SQLException e) {
+            System.out.println("Error al cargar los datos de asistencia: " + e.getMessage());
         }
 
-        // Cerrar el ResultSet, el PreparedStatement y la conexión a la base de datos
-        resultSet.close();
-        statement.close();
-        dbConnection.closeConnection();
-    } catch (SQLException e) {
-        System.out.println("Error al cargar los datos de asistencia: " + e.getMessage());
     }
-  
-   
-   }
 
     public Attendance() {
-       initComponents();
+        initComponents();
 
-    // Llamar al método para cargar los datos de asistencia en la tabla
-    cargarDatosAsistencia();
+        // Llamar al método para cargar los datos de asistencia en la tabla
+        cargarDatosAsistencia();
     }
-
-    
-    
-    
 
     @SuppressWarnings("unchecked")
 
@@ -97,12 +94,12 @@ public class Attendance extends javax.swing.JPanel {
         txtsalida = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
         txt_turno = new javax.swing.JTextField();
-        btnagregar = new javax.swing.JButton();
-        btnmodificar = new javax.swing.JButton();
-        btnactualizar = new javax.swing.JButton();
-        btneliminar = new javax.swing.JButton();
         jScrollPane4 = new javax.swing.JScrollPane();
         datos_asis = new javax.swing.JTable();
+        btnagregar = new javax.swing.JButton();
+        btnactualizar = new javax.swing.JButton();
+        btneliminar = new javax.swing.JButton();
+        btnmodificar = new javax.swing.JButton();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -171,32 +168,11 @@ public class Attendance extends javax.swing.JPanel {
         jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabel10.setText("Turno:");
 
-        btnagregar.setText("Agregar");
-        btnagregar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnagregarActionPerformed(evt);
-            }
-        });
-
-        btnmodificar.setText("Modificar");
-        btnmodificar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnmodificarActionPerformed(evt);
-            }
-        });
-
-        btnactualizar.setText("Actualizar");
-
-        btneliminar.setText("Eliminar");
-        btneliminar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btneliminarActionPerformed(evt);
-            }
-        });
-
         datos_asis.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null}
             },
             new String [] {
                 "Id", "cedula", "Nombre", "Apellido", "Cargo", "Hora_entrada", "Hora_salida", "Turno"
@@ -209,14 +185,43 @@ public class Attendance extends javax.swing.JPanel {
             datos_asis.getColumnModel().getColumn(0).setMaxWidth(50);
         }
 
+        btnagregar.setText("Agregar");
+        btnagregar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnagregarActionPerformed(evt);
+            }
+        });
+
+        btnactualizar.setText("Actualizar");
+        btnactualizar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnactualizarActionPerformed(evt);
+            }
+        });
+
+        btneliminar.setText("Eliminar");
+        btneliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btneliminarActionPerformed(evt);
+            }
+        });
+
+        btnmodificar.setText("Modificar");
+        btnmodificar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnmodificarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGap(26, 26, 26)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane4)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(26, 26, 26)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -242,34 +247,30 @@ public class Attendance extends javax.swing.JPanel {
                                                 .addGap(58, 58, 58)
                                                 .addComponent(jLabel6))
                                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                                .addGap(132, 132, 132)
+                                                .addComponent(jLabel9)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                                 .addComponent(txtsalida, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                         .addGap(18, 18, 18)
-                                        .addComponent(txtcargo, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 19, Short.MAX_VALUE))
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(txtapellido, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(0, 0, Short.MAX_VALUE))))
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(jPanel1Layout.createSequentialGroup()
-                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jLabel8)
-                                        .addComponent(jLabel10))
-                                    .addGap(28, 28, 28)
-                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(txtentrada)
-                                        .addComponent(txt_turno, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE))
-                                    .addGap(50, 50, 50)
-                                    .addComponent(jLabel9))
+                                        .addComponent(txtcargo, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(txtapellido, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel8)
+                                    .addComponent(jLabel10))
+                                .addGap(28, 28, 28)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(txtentrada)
+                                    .addComponent(txt_turno, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE)))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel7)
-                                .addComponent(jScrollPane4))))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(btnmodificar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnagregar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnactualizar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btneliminar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                                .addGap(529, 529, 529)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(btnagregar, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(btnactualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(btneliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(btnmodificar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(0, 113, Short.MAX_VALUE)))
                 .addGap(53, 53, 53))
         );
         jPanel1Layout.setVerticalGroup(
@@ -286,32 +287,40 @@ public class Attendance extends javax.swing.JPanel {
                     .addComponent(jLabel6)
                     .addComponent(txtcargo, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(29, 29, 29)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(txtcedula, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel5)
-                    .addComponent(txtapellido, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnagregar))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnmodificar)
-                .addGap(10, 10, 10)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel7)
-                    .addComponent(btnactualizar))
-                .addGap(16, 16, 16)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel8)
-                    .addComponent(txtentrada, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel9)
-                    .addComponent(txtsalida, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btneliminar))
-                .addGap(26, 26, 26)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel10)
-                    .addComponent(txt_turno, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel3)
+                            .addComponent(txtcedula, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel5)
+                            .addComponent(txtapellido, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(45, 45, 45)
+                        .addComponent(jLabel7))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(btnagregar, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnmodificar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(14, 14, 14)))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(19, 19, 19)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel8)
+                            .addComponent(txtentrada, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel9)
+                            .addComponent(txtsalida, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(43, 43, 43)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel10)
+                            .addComponent(txt_turno, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnactualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btneliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(28, Short.MAX_VALUE))
+                .addContainerGap(11, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -320,7 +329,7 @@ public class Attendance extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 885, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 987, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -332,17 +341,212 @@ public class Attendance extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnagregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnagregarActionPerformed
+    private void actionAdd() {
+        String id = txtId.getText();
+        String cedula = txtcedula.getText();
+        String nombre = txtnombre.getText();
+        String apellido = txtapellido.getText();
+        String cargo = txtcargo.getText();
+        String horaEntrada = txtentrada.getText();
+        String horaSalida = txtsalida.getText();
+        String turno = txt_turno.getText();
 
+        // Validar que los campos no estén vacíos
+        if (id.isEmpty() || cedula.isEmpty() || nombre.isEmpty() || apellido.isEmpty()
+                || cargo.isEmpty() || horaEntrada.isEmpty() || horaSalida.isEmpty() || turno.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Insertar datos en la base de datos
+        try {
+            DBConnection db = new DBConnection();
+            db.openConnection();
+
+            String query = "INSERT INTO asistencia (id, cedula, nombre, apellido, cargo, hora_entrada, hora_salida, turno) "
+                    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            PreparedStatement statement = db.prepareStatement(query);
+            statement.setString(1, id);
+            statement.setString(2, cedula);
+            statement.setString(3, nombre);
+            statement.setString(4, apellido);
+            statement.setString(5, cargo);
+            statement.setString(6, horaEntrada);
+            statement.setString(7, horaSalida);
+            statement.setString(8, turno);
+
+            int rowsInserted = statement.executeUpdate();
+            if (rowsInserted > 0) {
+                JOptionPane.showMessageDialog(this, "Datos agregados correctamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                cargarDatosAsistencia();
+            } else {
+                JOptionPane.showMessageDialog(this, "Error al agregar los datos", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+
+            db.closeConnection();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Error de base de datos: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+// Declarar una variable global para almacenar el ID del registro que se va a editar
+    private int idEditar = -1;
+    private void btnagregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnagregarActionPerformed
+        actionAdd();
     }//GEN-LAST:event_btnagregarActionPerformed
 
-    private void btnmodificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnmodificarActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnmodificarActionPerformed
+    private void btnactualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnactualizarActionPerformed
+        actionUpdate();
+    }//GEN-LAST:event_btnactualizarActionPerformed
 
     private void btneliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btneliminarActionPerformed
-        // TODO add your handling code here:
+        actionDelete();
     }//GEN-LAST:event_btneliminarActionPerformed
+
+    private void btnmodificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnmodificarActionPerformed
+        actionModify();
+    }//GEN-LAST:event_btnmodificarActionPerformed
+
+    private void actionModify() {
+        // Obtener el ID del registro seleccionado en la tabla (puedes hacer esto desde un evento de selección de la tabla)
+        int filaSeleccionada = datos_asis.getSelectedRow();
+        if (filaSeleccionada != -1) {
+            // Obtener el valor del ID en la columna 0 (o la columna donde esté el ID en tu tabla)
+            idEditar = Integer.parseInt(datos_asis.getValueAt(filaSeleccionada, 0).toString());
+
+            // Obtener los datos del registro desde la base de datos usando el ID
+            try {
+                DBConnection db = new DBConnection();
+                db.openConnection();
+
+                String query = "SELECT * FROM asistencia WHERE id=?";
+                PreparedStatement statement = db.prepareStatement(query);
+                statement.setInt(1, idEditar);
+                ResultSet rs = statement.executeQuery();
+
+                if (rs.next()) {
+                    // Mostrar los datos en los campos de texto para que puedan ser editados
+                    txtId.setText(rs.getString("id"));
+                    txtcedula.setText(rs.getString("cedula"));
+                    txtnombre.setText(rs.getString("nombre"));
+                    txtapellido.setText(rs.getString("apellido"));
+                    txtcargo.setText(rs.getString("cargo"));
+                    txtentrada.setText(rs.getString("hora_entrada"));
+                    txtsalida.setText(rs.getString("hora_salida"));
+                    txt_turno.setText(rs.getString("turno"));
+                }
+
+                db.closeConnection();
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(this, "Error al obtener los datos: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Por favor, seleccione un registro para editar", "Advertencia", JOptionPane.WARNING_MESSAGE);
+        }
+    }
+
+    private void actionUpdate() {
+        // Verificar que se haya seleccionado un registro para editar
+        if (idEditar != -1) {
+            String id = txtId.getText();
+            String cedula = txtcedula.getText();
+            String nombre = txtnombre.getText();
+            String apellido = txtapellido.getText();
+            String cargo = txtcargo.getText();
+            String horaEntrada = txtentrada.getText();
+            String horaSalida = txtsalida.getText();
+            String turno = txt_turno.getText();
+
+            // Validar que los campos no estén vacíos
+            if (id.isEmpty() || cedula.isEmpty() || nombre.isEmpty() || apellido.isEmpty()
+                    || cargo.isEmpty() || horaEntrada.isEmpty() || horaSalida.isEmpty() || turno.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Actualizar los datos en la base de datos
+            try {
+                DBConnection db = new DBConnection();
+                db.openConnection();
+
+                String query = "UPDATE asistencia SET id=?, cedula=?, nombre=?, apellido=?, cargo=?, hora_entrada=?, hora_salida=?, turno=? WHERE id=?";
+                PreparedStatement statement = db.prepareStatement(query);
+                statement.setString(1, id);
+                statement.setString(2, cedula);
+                statement.setString(3, nombre);
+                statement.setString(4, apellido);
+                statement.setString(5, cargo);
+                statement.setString(6, horaEntrada);
+                statement.setString(7, horaSalida);
+                statement.setString(8, turno);
+                statement.setInt(9, idEditar);
+
+                int rowsUpdated = statement.executeUpdate();
+                if (rowsUpdated > 0) {
+                    JOptionPane.showMessageDialog(this, "Datos actualizados correctamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                    cargarDatosAsistencia();
+                    // Limpiar los campos de texto y restablecer el ID de edición
+                    limpiarCampos();
+                    idEditar = -1;
+                } else {
+                    JOptionPane.showMessageDialog(this, "Error al actualizar los datos", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+
+                db.closeConnection();
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(this, "Error de base de datos: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Por favor, seleccione un registro para editar", "Advertencia", JOptionPane.WARNING_MESSAGE);
+        }
+    }
+
+    private void limpiarCampos() {
+        txtId.setText("");
+        txtcedula.setText("");
+        txtnombre.setText("");
+        txtapellido.setText("");
+        txtcargo.setText("");
+        txtentrada.setText("");
+        txtsalida.setText("");
+        txt_turno.setText("");
+    }//GEN-LAST:event_btnactualizarActionPerformed
+
+    private void actionDelete() {
+        // Obtener el ID del registro seleccionado en la tabla (puedes hacer esto desde un evento de selección de la tabla)
+        int filaSeleccionada = datos_asis.getSelectedRow();
+        if (filaSeleccionada != -1) {
+            // Obtener el valor del ID en la columna 0 (o la columna donde esté el ID en tu tabla)
+            int idEliminar = Integer.parseInt(datos_asis.getValueAt(filaSeleccionada, 0).toString());
+
+            // Mostrar un mensaje de confirmación antes de eliminar el registro
+            int confirmacion = JOptionPane.showConfirmDialog(this, "¿Estás seguro de eliminar este registro?", "Confirmar eliminación", JOptionPane.YES_NO_OPTION);
+            if (confirmacion == JOptionPane.YES_OPTION) {
+                // Eliminar el registro de la base de datos
+                try {
+                    DBConnection db = new DBConnection();
+                    db.openConnection();
+
+                    String query = "DELETE FROM asistencia WHERE id=?";
+                    PreparedStatement statement = db.prepareStatement(query);
+                    statement.setInt(1, idEliminar);
+
+                    int rowsDeleted = statement.executeUpdate();
+                    if (rowsDeleted > 0) {
+                        JOptionPane.showMessageDialog(this, "Registro eliminado correctamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                        cargarDatosAsistencia();
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Error al eliminar el registro", "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+
+                    db.closeConnection();
+                } catch (SQLException e) {
+                    JOptionPane.showMessageDialog(this, "Error de base de datos: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Por favor, seleccione un registro para eliminar", "Advertencia", JOptionPane.WARNING_MESSAGE);
+        }
+    }
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
